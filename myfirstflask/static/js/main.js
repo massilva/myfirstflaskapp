@@ -10,7 +10,7 @@
     defaultOptions = {zoom: 19, center: [-13.0035168, -38.4802806], zoomControl: true};
     // Carregar mapa
     function loadMap(defaultOptions) {
-        var controlMap, openstreetmap, googleHybrid;
+        var controlMap, openstreetmap, googleHybrid, promise;
         //controle de camadas
         controlMap = L.control.layers();
         // Base de mapas - ruas
@@ -33,6 +33,27 @@
         map.addLayer(googleHybrid);
         // Adiciona controle de base de mapas
         map.addControl(controlMap);
+        map.on("click", function (e) {
+            var data, promiseAdd;
+            data = {
+                lat: e.latlng.lat,
+                lng: e.latlng.lng
+            };
+            promiseAdd = $.post("/marker/add", data);
+            promiseAdd.done(function (response) {
+                var latlng;
+                response = JSON.parse(response);
+                latlng = L.latLng(response.lat, response.lng);
+                L.marker(latlng).addTo(this);
+            }.bind(this));
+        });
+        promise = $.get("/marker/all");
+        promise.done(function (response) {
+            response = JSON.parse(response);
+            response.map(function (coord) {
+                L.marker(coord).addTo(map);
+            });
+        });
     }
     // Callback sucesso geolocalização
     function successGeo(position) {

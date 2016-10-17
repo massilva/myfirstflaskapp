@@ -12,11 +12,14 @@ app.config.from_object('myfirstflask.config')
 db = SQLAlchemy(app)
 
 # Automatically create tables
-# from myfirstflask.models import categoria_cabo, tipo_poste, poste, instituicao
-# db.create_all()
+from myfirstflask.models import marker
+db.create_all()
 
 # Blueprints
 from myfirstflask.routes.app import mod_app
 app.register_blueprint(mod_app)
+
+from myfirstflask.routes.marker import mod_marker
+app.register_blueprint(mod_marker)
 
 from myfirstflask.routes import errors
