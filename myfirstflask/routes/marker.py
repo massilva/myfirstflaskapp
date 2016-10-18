@@ -8,14 +8,22 @@ mod_marker = Blueprint('mod_marker', __name__)
 
 @mod_marker.route('/marker/add', methods=['POST'])
 def add_marker():
+    #  data = json.loads(request.data.decode('utf-8'))
     data = {
         'lat': request.form.get("lat"),
         'lng': request.form.get("lng")
     }
     marker = Marker(request.form.get("lat"), request.form.get("lng"))
-    db.session.add(marker)
-    db.session.commit()
-    data['id'] = marker.id
+    try:
+        db.session.add(marker)
+        db.session.commit()
+        data['id'] = marker.id
+        data['msg'] = "Adicionado com sucesso"
+    except Exception as error:
+        print(repr(error))
+        data['id'] = -1
+        data['msg'] = "Não foi possível adicionar o marcador"
+
     return json.dumps(data), 200
     # return render_template('index.html', title='Index')
 

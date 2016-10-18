@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from testes.baseTest import *
+from tests.baseTest import *
+from tests.test_marker import MarkerTest
 import unittest
 
 
