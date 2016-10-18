@@ -23,9 +23,7 @@ def add_marker():
         print(repr(error))
         data['id'] = -1
         data['msg'] = "Não foi possível adicionar o marcador"
-
     return json.dumps(data), 200
-    # return render_template('index.html', title='Index')
 
 
 @mod_marker.route('/marker/all')

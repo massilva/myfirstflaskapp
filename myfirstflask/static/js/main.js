@@ -34,18 +34,25 @@
         // Adiciona controle de base de mapas
         map.addControl(controlMap);
         map.on("click", function (e) {
-            var data, promiseAdd;
+            var data, promiseAdd, successCallBack, failureCallBack;
             data = {
                 lat: e.latlng.lat,
                 lng: e.latlng.lng
             };
-            promiseAdd = $.post("/marker/add", data);
-            promiseAdd.done(function (response) {
+            successCallBack = function (response) {
                 var latlng;
                 response = JSON.parse(response);
                 latlng = L.latLng(response.lat, response.lng);
-                L.marker(latlng).addTo(this);
-            }.bind(this));
+                L.marker(latlng).addTo(map);
+            };
+            failureCallBack = function (response) {
+                var server_response = JSON.parse(response.responseText);
+                alert(server_response.msg);
+                console.error(response);
+            };
+            //Envia os dados para o servidor
+            promiseAdd = $.post("/marker/add", data);
+            promiseAdd.done(successCallBack).catch(failureCallBack);
         });
         promise = $.get("/marker/all");
         promise.done(function (response) {
