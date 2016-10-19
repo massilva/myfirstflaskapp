@@ -1,7 +1,5 @@
 # from geoalchemy2 import Geography
 from myfirstflask.app import db
-from myfirstflask.constants import SRID
-
 
 class Marker(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
